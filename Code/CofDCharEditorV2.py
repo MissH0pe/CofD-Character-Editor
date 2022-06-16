@@ -210,14 +210,14 @@ class CharEditor(QtWidgets.QWidget):
         self.settings.setGeometry(400, 150, 384, 512)
         self.settingsLayout = self.MakeGrid(1)
         self.settings.setLayout(self.settingsLayout[0])
-        scroll_area = QtWidgets.QScrollArea()
-        scroll_area.setWidget(self.settings)
+        # scroll_area = QtWidgets.QScrollArea()
+        # scroll_area.setWidget(self.settings)
         # scroll_area.setWidgetResizable(True)
         # scroll_area.resize(16, 768)
         # scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         # scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         # self.settingsLayout[0].setContentsMargins(0,0,0,0)
-        self.settingsLayout[0].addWidget(scroll_area)
+        # self.settingsLayout[0].addWidget(scroll_area)
         self.settings.show()
         self.settingsTitleLayout = self.MakeGrid(3)
         self.settingsTitle = self.makeLabel("Settings")
@@ -352,10 +352,11 @@ class CharEditor(QtWidgets.QWidget):
         self.titlefont = QtGui.QFont()
         self.titlefont.setFamily("stcaiyun")  # Set Font
         self.titlefont.setBold(True)  # Bold
-        self.titlefont.setPointSize(16)  # Set font size
+        self.titlefont.setPointSize(20)  # Set font size
 
         self.subtitlefont = QtGui.QFont()
         self.subtitlefont.setFamily("stcaiyun")  # Set Font
+        self.subtitlefont.setBold(True)  # Bold
         self.subtitlefont.setPointSize(12)  # Set font size
 
         self.mainSheet = self.MakeGrid(1)
