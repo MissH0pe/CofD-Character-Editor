@@ -21,6 +21,43 @@ def makeScrollBar(layout, widget):
     layout.addWidget(scroll_area)
     return layout
 
+class MainWindow(QtWidgets.QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.scroll = QtWidgets.QScrollArea()             # Scroll Area which contains the widgets, set as the centralWidget
+        self.widget = QtWidgets.QWidget()                 # Widget that contains the collection of Vertical Box
+        self.vbox = QtWidgets.QVBoxLayout()               # The Vertical Box that contains the Horizontal Boxes of  labels and buttons
+
+        # for i in range(1,50):
+        #     object = QtWidgets.QLabel("TextLabel")
+        #     self.vbox.addWidget(object)
+
+        self.widget.setLayout(self.vbox)
+
+        #Scroll Area Properties
+        self.scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+        self.scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setWidget(self.widget)
+
+        self.setCentralWidget(self.scroll)
+        #
+        # self.setGeometry(600, 100, 1000, 900)
+        # self.setWindowTitle('Scroll Area Demonstration')
+        # self.show()
+
+    def passWidget(self, widget):
+        self.vbox.addWidget(widget)
+        # self.scroll.setWidget(widget)
+
+        # self.setCentralWidget(self.scroll)
+
+        self.setGeometry(600, 100, 1000, 900)
+        self.setWindowTitle('Scroll Area Demonstration')
+        # self.show()
+
 class CharEditor(QtWidgets.QWidget):
 
     def pullData(self):
@@ -325,7 +362,7 @@ class CharEditor(QtWidgets.QWidget):
         self.title = QtWidgets.QLabel()
         pixMap = QtGui.QPixmap.fromImage('CofD.png')
         self.title.setPixmap( pixMap )
-        self.title.show()
+        # self.title.show()
 
     def settingsInit(self):
         if path.exists('settings.json'):
@@ -342,10 +379,19 @@ class CharEditor(QtWidgets.QWidget):
     def __init__(self):
         super(CharEditor, self).__init__()
 
-        self.setGeometry(300, 75, 1024, 768)
+        # self.setGeometry(300, 75, 1024, 768)
         self.setWindowTitle('Chronicles of Darkness Interactive Character Sheet')
 
+        self.show()
+
         self.settingsInit()
+
+        self.testwindow = MainWindow()
+        # self.testwindow.passWidget(self)
+        # self.testwindow.pullParent(self)
+        # layout = QtWidgets.QGridLayout()
+        # layout = makeScrollBar(layout, self.testwindow)
+        self.testwindow.show()
 
         self.savepath = ""
 
@@ -360,8 +406,8 @@ class CharEditor(QtWidgets.QWidget):
         self.subtitlefont.setPointSize(12)  # Set font size
 
         self.mainSheet = self.MakeGrid(1)
-        self.setLayout(self.mainSheet[0])
-        self.mainSheet[0].setContentsMargins(0,0,0,0)
+        # self.setLayout(self.mainSheet[0])
+        # self.mainSheet[0].setContentsMargins(0,0,0,0)
 
         self.makeMenu()
         self.addElementtoGrid(self.menubar, self.mainSheet)
@@ -382,14 +428,16 @@ class CharEditor(QtWidgets.QWidget):
 
         self.positionElements()
 
+        self.testwindow.passWidget(self)
+
 app = QtWidgets.QApplication([])
 widget = CharEditor()
 w = QtWidgets.QWidget()
 w.setWindowTitle('Chronicles of Darkness Interactive Character Sheet')
 
-layout = QtWidgets.QGridLayout(w)
-layout = makeScrollBar(layout, widget)
+# layout = QtWidgets.QGridLayout(w)
+# layout = makeScrollBar(layout, widget)
 
-w.show()
+# w.show()
 
 sys.exit(app.exec())
