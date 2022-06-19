@@ -27,23 +27,33 @@ class ScrollableWindow(QtWidgets.QMainWindow):
 
 class SettingsClass:
     def reloadSettings(self): # todo make sure to copy over data from existing merits and add back in if there is enough space
-        # print("worky")
-        for k in range(len(self.parent.meritsArray)):
-            self.widgetLib.deleteArray(self.parent.meritsArray[k], self.parent.meritsGrid)
+        if self.parent.settingsClass.meritCountSettings[1].text() != "":
+            array = []
+            for k in range(len(self.parent.meritsArray)):
+                if self.parent.meritsArray[k][0].text() != "" or self.parent.meritsArray[k][1].text() != "":
+                    array = array + [[self.parent.meritsArray[k][0].text(), self.parent.meritsArray[k][1].text()]]
 
-        self.parent.meritsArray = []
+            for k in range(len(self.parent.meritsArray)):
+                self.widgetLib.deleteArray(self.parent.meritsArray[k], self.parent.meritsGrid)
 
-        self.parent.settingsdict['meritcount'] = int(self.parent.settingsClass.meritCountSettings[1].text())
+            self.parent.meritsArray = []
 
-        for k in range(self.parent.settingsdict['meritcount']):
-            self.parent.meritsArray = self.parent.meritsArray + [self.widgetLib.makeMerit()]
+            self.parent.settingsdict['meritcount'] = int(self.parent.settingsClass.meritCountSettings[1].text())
 
-        with open('settings.json', 'w') as f:
-            json.dump(self.parent.settingsdict, f)
-        
-        self.parent.splatManager.positionSplats()
-        #
-        # self.parent.saveLoad.quickSave()
+            for k in range(self.parent.settingsdict['meritcount']):
+                self.parent.meritsArray = self.parent.meritsArray + [self.widgetLib.makeMerit()]
+
+            with open('settings.json', 'w') as f:
+                json.dump(self.parent.settingsdict, f)
+
+            for k in range(self.parent.settingsdict['meritcount']):
+                if k + 1 <= len(array):
+                    self.parent.meritsArray[k][0].setText(array[k][0])
+                    self.parent.meritsArray[k][1].setText(array[k][1])
+
+            self.parent.splatManager.positionSplats()
+            #
+            # self.parent.saveLoad.quickSave()
 
     def positionElementsSettings(self):
         self.widgetLib.addArraystoGridIndividual([self.widgetLib.makeBlankLabel(), self.settingsTitle, self.widgetLib.makeBlankLabel()], self.settingsTitleLayout)

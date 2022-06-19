@@ -79,7 +79,7 @@ class SplatManager:
 
         self.parent.middleColumn[2] = 0
         self.parent.middleColumn[3] = 0
-        #
+        
         # self.parent.rightColumn[2] = 0
         # self.parent.rightColumn[3] = 0
 
