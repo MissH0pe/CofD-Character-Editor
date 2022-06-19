@@ -82,28 +82,30 @@ class WidgetLibrary:
         return [QtWidgets.QGridLayout(), columns, 0, 0]
         # return BundledGrid(columns)
 
-    def makeMerit(self, charsheetbool = True):
+    def makeMerit(self, window = "charsheet"):
         box1 = QtWidgets.QLineEdit()
         box2 = QtWidgets.QLineEdit()
-        if charsheetbool == True:
+        if window == "charsheet":
             box1.textChanged.connect(self.saveLoad.quickSave)
             box2.textChanged.connect(self.saveLoad.quickSave)
         return [box1, box2]
 
-    def makeSkill(self, labelName, charsheetbool = True):
+    def makeSkill(self, labelName, window = "charsheet"):
         checkbox = QtWidgets.QCheckBox()
         checkbox.clicked.connect(self.saveLoad.quickSave)
         label = self.makeLabel(labelName)
         box = QtWidgets.QLineEdit()
-        if charsheetbool == True:
+        if window == "charsheet":
             box.textChanged.connect(self.saveLoad.quickSave)
         return [checkbox, label, box]
 
-    def LabeledTextBox(self, labelName, charsheetbool = True): #pass charsheetbool = False when not using for charsheet
+    def LabeledTextBox(self, labelName, window = "charsheet"): #pass charsheet to window when using for charsheet or settings
         label = self.makeLabel(labelName + ": ")
         box = QtWidgets.QLineEdit()
-        if charsheetbool == True:
+        if window == "charsheet":
             box.textChanged.connect(self.saveLoad.quickSave)
+        elif window == "settings":
+            box.textChanged.connect(self.parent.settingsClass.reloadSettings)
         return [label, box]
 
     def LabeledCheckBox(self, labelName, checkdef):

@@ -21,8 +21,6 @@ from splats import humansplat
 # outline array of arrays           array1
 # array1                            each grouped set of char details
 
-MERITCOUNT = 10
-
 
 
 class SplatManager:
@@ -79,8 +77,8 @@ class SplatManager:
         self.parent.skillsGrid[2] = 0
         self.parent.skillsGrid[3] = 0
 
-        # self.parent.middleColumn[2] = 0
-        # self.parent.middleColumn[3] = 0
+        self.parent.middleColumn[2] = 0
+        self.parent.middleColumn[3] = 0
         #
         # self.parent.rightColumn[2] = 0
         # self.parent.rightColumn[3] = 0
@@ -244,7 +242,7 @@ class CharEditorClass:
         else:
             self.settingsdict = {'settingsVersion': 0}
             self.settingsdict['splats'] = [True, True]
-            self.settingsdict['meritcount'] = MERITCOUNT
+            self.settingsdict['meritcount'] = 10
             with open('settings.json', 'w') as f:
                 json.dump(self.settingsdict, f)
 
