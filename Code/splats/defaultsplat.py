@@ -49,7 +49,7 @@ class DefaultClass:
         self.parent.survival[2].setText(data.get('survival'))
         self.parent.weaponry[2].setText(data.get('weaponry'))
 
-        self.parent.animalken[2].setText(data.get('animalken'))
+        self.parent.animalken[2].setText(data.get('animal ken'))
         self.parent.empathy[2].setText(data.get('empathy'))
         self.parent.expression[2].setText(data.get('expression'))
         self.parent.intimidation[2].setText(data.get('intimidation'))
@@ -76,7 +76,7 @@ class DefaultClass:
         self.parent.survival[0].setChecked(data.get('survivalspec'))
         self.parent.weaponry[0].setChecked(data.get('weaponryspec'))
 
-        self.parent.animalken[0].setChecked(data.get('animalkenspec'))
+        self.parent.animalken[0].setChecked(data.get('animal kenspec'))
         self.parent.empathy[0].setChecked(data.get('empathyspec'))
         self.parent.expression[0].setChecked(data.get('expressionspec'))
         self.parent.intimidation[0].setChecked(data.get('intimidationspec'))

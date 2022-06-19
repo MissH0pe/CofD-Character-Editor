@@ -170,9 +170,6 @@ class ScrollableWindowWithMenu(QtWidgets.QMainWindow):
 
 
 class CharEditorClass:
-    # def positionElements(self):
-    #     self.splatManager.positionSplats()
-
     def charDetails(self):
         self.charDetailsGrid = self.widgetLib.MakeGrid(6)
 
@@ -189,8 +186,6 @@ class CharEditorClass:
                 self.splatManager.splats[k].addSplat()
 
         self.splatManager.positionSplats()
-
-        # self.positionElements()
 
     def settingsInit(self):
         if path.exists('settings.json'):
@@ -246,8 +241,6 @@ class CharEditorClass:
         self.widgetLib.addGridtoLayout(self.skillsGrid[0], self.otherTraitsGrid)
 
         self.splatManager.positionSplats()
-
-        # self.positionElements()
 
         if path.exists('quicksave.json'):
             with open('quicksave.json') as f:
