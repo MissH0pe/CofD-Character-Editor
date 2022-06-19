@@ -21,6 +21,8 @@ from splats import humansplat
 # outline array of arrays           array1
 # array1                            each grouped set of char details
 
+MERITCOUNT = 10
+
 
 
 class SplatManager:
@@ -56,6 +58,9 @@ class SplatManager:
         self.parent.widgetLib.addArraystoGridIndividualGroups(checks, self.parent.settingsClass.splatsSettingsLayout)
 
     def positionSplats(self):
+        if self.parent.charDetailsSpacer[0] > 0:
+            self.parent.widgetLib.deleteArray(self.parent.charDetailsSpacer[1], self.parent.charDetailsGrid)
+
         self.parent.charDetailsGrid[2] = 0
         self.parent.charDetailsGrid[3] = 0
 
@@ -68,34 +73,64 @@ class SplatManager:
         self.parent.attributesGrid[2] = 0
         self.parent.attributesGrid[3] = 0
 
-        self.parent.otherTraitsGrid[2] = 0
-        self.parent.otherTraitsGrid[3] = 0
+        self.parent.miscGrid[2] = 0
+        self.parent.miscGrid[3] = 0
 
         self.parent.skillsGrid[2] = 0
         self.parent.skillsGrid[3] = 0
 
-        outline = [[], [], [], [], []]
+        # self.parent.middleColumn[2] = 0
+        # self.parent.middleColumn[3] = 0
+        #
+        # self.parent.rightColumn[2] = 0
+        # self.parent.rightColumn[3] = 0
+
+        self.parent.meritsGrid[2] = 0
+        self.parent.meritsGrid[3] = 0
+
+        outline = [{}, [0, []], [], [[], [], []]]
         for k in range(len(self.splats)):
             outline = self.splats[k].positionSplatElements(outline)
 
-        for k in range(len(outline[0])):
-            self.parent.widgetLib.addArraystoGridGroupGroups(outline[0][k], self.parent.charDetailsGrid)
+        self.parent.title.setPixmap(QtGui.QPixmap.fromImage(outline[0]['default']))
+
+        chardetailsr = outline[1][0] % 3
+
+        for k in range(len(outline[1][1])):
+            if chardetailsr == 0:
+                self.parent.charDetailsSpacer = [0, []]
+            elif (len(outline[1][1]) - k) == 2 and chardetailsr == 2:
+                self.parent.charDetailsSpacer = [1, [self.parent.widgetLib.makeBlankLabel()]]
+                self.parent.widgetLib.addArraystoGridIndividual(self.parent.charDetailsSpacer[1], self.parent.charDetailsGrid)
+            elif (len(outline[1][1]) - k) == 1 and chardetailsr == 1:
+                self.parent.charDetailsSpacer = [2, [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel()]]
+                self.parent.widgetLib.addArraystoGridIndividual(self.parent.charDetailsSpacer[1], self.parent.charDetailsGrid)
+            self.parent.widgetLib.addArraystoGridGroupGroups(outline[1][1][k], self.parent.charDetailsGrid)
 
         self.parent.widgetLib.addArraystoGridIndividual([self.parent.widgetLib.makeBlankLabel(), self.parent.attributesTitle, self.parent.widgetLib.makeBlankLabel()], self.parent.attributesTitleGrid)
 
-        for k in range(len(outline[1])):
-            self.parent.widgetLib.addArraystoGridGroupGroups(outline[1][k], self.parent.attributesGrid)
-
-        self.parent.widgetLib.addArraystoGridIndividual([self.parent.widgetLib.makeBlankLabel(), self.parent.skillsTitle, self.parent.widgetLib.makeBlankLabel()], self.parent.skillsGrid)
-
         for k in range(len(outline[2])):
-            self.parent.widgetLib.addArraystoGridIndividual(outline[2][k], self.parent.skillsGrid)
+            self.parent.widgetLib.addArraystoGridGroupGroups(outline[2][k], self.parent.attributesGrid)
 
-        for k in range(len(outline[3])):
-            self.parent.widgetLib.addArraystoGridIndividual(outline[3][k], self.parent.skillsGrid)
+        # self.parent.skillsTitle.setAlignment(QtGui.Qt.AlignCenter)
+        self.parent.widgetLib.addElementtoGrid(self.parent.skillsTitle, self.parent.miscGrid)
+        self.parent.widgetLib.addElementtoGridWithWidth(self.parent.otherTraitsTitle, self.parent.miscGrid, 2)
 
-        for k in range(len(outline[4])):
-            self.parent.widgetLib.addArraystoGridIndividual(outline[4][k], self.parent.skillsGrid)
+        # self.parent.widgetLib.addArraystoGridIndividual([self.parent.widgetLib.makeBlankLabel(), self.parent.skillsTitle, self.parent.widgetLib.makeBlankLabel()], self.parent.miscGrid)
+
+        for k in range(len(outline[3][0])):
+            self.parent.widgetLib.addArraystoGridIndividual(outline[3][0][k], self.parent.skillsGrid)
+
+        for k in range(len(outline[3][1])):
+            self.parent.widgetLib.addArraystoGridIndividual(outline[3][1][k], self.parent.skillsGrid)
+
+        for k in range(len(outline[3][2])):
+            self.parent.widgetLib.addArraystoGridIndividual(outline[3][2][k], self.parent.skillsGrid)
+
+        self.parent.widgetLib.addElementtoGridWithWidth(self.parent.meritsTitle, self.parent.meritsGrid, 2)
+
+        for k in range(self.parent.settingsdict['meritcount']):
+            self.parent.widgetLib.addArraystoGridGroup(self.parent.meritsArray[k], self.parent.meritsGrid)
 
     def __init__(self, parent):
         self.parent = parent
@@ -172,14 +207,27 @@ class ScrollableWindowWithMenu(QtWidgets.QMainWindow):
 class CharEditorClass:
     def charDetails(self):
         self.charDetailsGrid = self.widgetLib.MakeGrid(6)
+        self.charDetailsSpacer = [0]
 
         self.attributesCatGrid = self.widgetLib.MakeGrid(1)
         self.attributesTitleGrid = self.widgetLib.MakeGrid(3)
-        self.attributesTitle = self.widgetLib.makeLabel("Attributes")
+        self.attributesTitle = self.widgetLib.makeTitle("Attributes")
         self.attributesTitle.setFont(self.titlefont)
         self.attributesGrid = self.widgetLib.MakeGrid(7)
-        self.otherTraitsGrid = self.widgetLib.MakeGrid(3)
+
+        self.miscGrid = self.widgetLib.MakeGrid(3)
         self.skillsGrid = self.widgetLib.MakeGrid(3)
+        self.otherTraitsTitle = self.widgetLib.makeTitle("Other Traits")
+        self.otherTraitsTitle.setFont(self.titlefont)
+
+        self.middleColumn = self.widgetLib.MakeGrid(1)
+        self.rightColumn = self.widgetLib.MakeGrid(1)
+
+        self.meritsGrid = self.widgetLib.MakeGrid(2)
+        self.meritsTitle = self.widgetLib.makeTitle("Merits")
+        self.meritsTitle.setFont(self.subtitlefont)
+
+        self.meritsArray = []
 
         for k in range(len(self.splatManager.splats)):
             if self.settingsdict['splats'][k] == True:
@@ -196,6 +244,7 @@ class CharEditorClass:
         else:
             self.settingsdict = {'settingsVersion': 0}
             self.settingsdict['splats'] = [True, True]
+            self.settingsdict['meritcount'] = MERITCOUNT
             with open('settings.json', 'w') as f:
                 json.dump(self.settingsdict, f)
 
@@ -219,6 +268,8 @@ class CharEditorClass:
         self.app = QtWidgets.QApplication(sys.argv)
         self.mainWindow = ScrollableWindowWithMenu(self)
 
+        self.title = QtWidgets.QLabel()
+
         self.splatManager = SplatManager(self)
 
         self.savepath = ""
@@ -231,14 +282,22 @@ class CharEditorClass:
 
         self.charDetails()
 
+        # self.widgetLib.addElementtoGrid(self.title, self.mainWindow.baseLayout)
+        self.titleGrid = self.widgetLib.MakeGrid(3)
+        self.widgetLib.addArraystoGridIndividual([self.widgetLib.makeBlankLabel(), self.title, self.widgetLib.makeBlankLabel()], self.titleGrid)
+        self.widgetLib.addGridtoLayout(self.titleGrid[0], self.mainWindow.baseLayout)
+
         self.widgetLib.addGridtoLayout(self.charDetailsGrid[0], self.mainWindow.baseLayout)
 
         self.widgetLib.addGridtoLayout(self.attributesCatGrid[0], self.mainWindow.baseLayout)
         self.widgetLib.addGridtoLayout(self.attributesTitleGrid[0], self.attributesCatGrid)
         self.widgetLib.addGridtoLayout(self.attributesGrid[0], self.attributesCatGrid)
 
-        self.widgetLib.addGridtoLayout(self.otherTraitsGrid[0], self.mainWindow.baseLayout)
-        self.widgetLib.addGridtoLayout(self.skillsGrid[0], self.otherTraitsGrid)
+        self.widgetLib.addGridtoLayout(self.miscGrid[0], self.mainWindow.baseLayout)
+        self.widgetLib.addGridtoLayout(self.skillsGrid[0], self.miscGrid)
+        self.widgetLib.addGridtoLayout(self.middleColumn[0], self.miscGrid)
+        self.widgetLib.addGridtoLayout(self.rightColumn[0], self.miscGrid)
+        self.widgetLib.addGridtoLayout(self.meritsGrid[0], self.middleColumn)
 
         self.splatManager.positionSplats()
 

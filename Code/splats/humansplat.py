@@ -11,13 +11,14 @@ class HumanClass:
 
     def positionSplatElements(self, outline):
         if self.parent.settingsdict['splats'][1] == True:
-            outline[0] = outline[0] + [[self.parent.groupname], [self.parent.faction], [self.parent.virtue, self.parent.vice]]
+            outline[1][0] = outline[1][0] + 5
+            outline[1][1] = outline[1][1] + [[self.parent.virtue, self.parent.vice], [self.parent.groupname], [self.parent.faction], [self.parent.chronicle]]
         return outline
 
     def pullSplatData(self, data):
         if self.parent.settingsdict['splats'][1] == True:
             data["is human"] = True
-            data = data | {"group name": self.parent.groupname[1].text(), "virtue": self.parent.virtue[1].text(), "vice": self.parent.vice[1].text(), "faction": self.parent.faction[1].text()}
+            data = data | {"group name": self.parent.groupname[1].text(), "virtue": self.parent.virtue[1].text(), "vice": self.parent.vice[1].text(), "faction": self.parent.faction[1].text(), "chronicle": self.parent.chronicle[1].text()}
         else:
             data["is human"] = False
         return data
@@ -30,16 +31,18 @@ class HumanClass:
             self.parent.virtue[1].setText(data.get('virtue'))
             self.parent.vice[1].setText(data.get('vice'))
             self.parent.faction[1].setText(data.get('faction'))
+            self.parent.chronicle[1].setText(data.get('chronicle'))
         else:
             if self.parent.settingsdict['splats'][1] == True:
                 self.removeSplat()
 
     def addSplat(self):
         self.parent.settingsdict['splats'][1] = True
-        self.parent.groupname = self.widgetLib.LabeledTextBox("Group Name")
         self.parent.virtue = self.widgetLib.LabeledTextBox("Virtue")
         self.parent.vice = self.widgetLib.LabeledTextBox("Vice")
+        self.parent.groupname = self.widgetLib.LabeledTextBox("Group Name")
         self.parent.faction = self.widgetLib.LabeledTextBox("Faction")
+        self.parent.chronicle = self.widgetLib.LabeledTextBox("Chronicle")
         with open('settings.json', 'w') as f:
             json.dump(self.parent.settingsdict, f)
 
@@ -49,6 +52,7 @@ class HumanClass:
         self.widgetLib.deleteArray(self.parent.virtue, self.parent.charDetailsGrid)
         self.widgetLib.deleteArray(self.parent.vice, self.parent.charDetailsGrid)
         self.widgetLib.deleteArray(self.parent.faction, self.parent.charDetailsGrid)
+        self.widgetLib.deleteArray(self.parent.chronicle, self.parent.charDetailsGrid)
         with open('settings.json', 'w') as f:
             json.dump(self.parent.settingsdict, f)
 

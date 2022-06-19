@@ -73,9 +73,22 @@ class WidgetLibrary:
         label.setText(text)
         return label
 
+    def makeTitle(self, text):
+        label = self.makeLabel(text)
+        label.setAlignment(QtGui.Qt.AlignCenter)
+        return label
+
     def MakeGrid(self, columns):
         return [QtWidgets.QGridLayout(), columns, 0, 0]
         # return BundledGrid(columns)
+
+    def makeMerit(self, charsheetbool = True):
+        box1 = QtWidgets.QLineEdit()
+        box2 = QtWidgets.QLineEdit()
+        if charsheetbool == True:
+            box1.textChanged.connect(self.saveLoad.quickSave)
+            box2.textChanged.connect(self.saveLoad.quickSave)
+        return [box1, box2]
 
     def makeSkill(self, labelName, charsheetbool = True):
         checkbox = QtWidgets.QCheckBox()
@@ -109,6 +122,11 @@ class WidgetLibrary:
             grid[0].addWidget(element[k], grid[3], grid[2])
             grid[2] = grid[2] + 1
         return grid
+
+    def addElementtoGridWithWidth(self, element, grid, width):
+        grid[0].addWidget(element, grid[3], grid[2], grid[3], grid[2] + width - 1)
+        grid[2] = grid[2] + width
+        grid = self.areColumnsFull(grid)
 
     def addElementtoGrid(self, element, grid):
         grid[0].addWidget(element, grid[3], grid[2])
