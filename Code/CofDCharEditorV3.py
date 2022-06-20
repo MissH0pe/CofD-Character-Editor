@@ -66,7 +66,7 @@ class SplatManager:
         self.parent.widgetLib.addElementtoGrid(self.parent.title, self.parent.titleGrid)
         self.parent.widgetLib.addGridtoLayout(self.parent.titleGrid[0], self.parent.mainWindow.baseLayout)
 
-        outline = [{}, [0, []], [], [[], [], []], [[]]]
+        outline = [{}, [0, []], [], [[], [], []], [[], []]]
         for k in range(len(self.splats)):
             outline = self.splats[k].positionSplatElements(outline)
 
@@ -147,6 +147,16 @@ class SplatManager:
 
         for k in range(self.parent.settingsdict['healthboxescount']):
             self.parent.widgetLib.addElementtoGrid(self.parent.healthBoxesArray[k][1].getButton(), self.parent.healthBoxesGrid)
+
+        self.parent.widgetLib.addGridtoLayout(self.parent.willpowerGrid[0], self.parent.rightColumn)
+        self.parent.widgetLib.addElementtoGrid(self.parent.willpowerTitle, self.parent.willpowerGrid)
+        self.parent.widgetLib.addGridtoLayout(self.parent.willpowerBoxesGrid[0], self.parent.willpowerGrid)
+
+        for k in range(self.parent.settingsdict['willpowerboxescount']):
+            self.parent.widgetLib.addElementtoGrid(self.parent.willpowerBoxesArray[k][0], self.parent.willpowerBoxesGrid)
+
+        for k in range(self.parent.settingsdict['willpowerboxescount']):
+            self.parent.widgetLib.addElementtoGrid(self.parent.willpowerBoxesArray[k][1], self.parent.willpowerBoxesGrid)
 
     def __init__(self, parent):
         self.parent = parent
@@ -275,6 +285,15 @@ class CharEditorClass:
         self.healthTitle.setFont(self.subtitlefont)
         self.healthBoxesGrid = self.widgetLib.MakeGrid(self.settingsdict['healthboxescount'])
         self.blankingGrids = self.blankingGrids + [self.healthBoxesGrid]
+
+        self.willpowerBoxesArray = []
+
+        self.willpowerGrid = self.widgetLib.MakeGrid(1)
+        self.blankingGrids = self.blankingGrids + [self.willpowerGrid]
+        self.willpowerTitle = self.widgetLib.makeTitle("Willpower")
+        self.willpowerTitle.setFont(self.subtitlefont)
+        self.willpowerBoxesGrid = self.widgetLib.MakeGrid(self.settingsdict['willpowerboxescount'])
+        self.blankingGrids = self.blankingGrids + [self.willpowerBoxesGrid]
 
         for k in range(len(self.splatManager.splats)):
             if self.settingsdict['splats'][k] == True:

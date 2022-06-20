@@ -11,6 +11,7 @@ class DefaultClass:
         outline[3][1] = outline[3][1] + [self.parent.widgetLib.makeBlankLabel(), self.parent.physicalSubtitle, self.parent.physicalPenalty, self.parent.athletics, self.parent.brawl, self.parent.drive, self.parent.firearms, self.parent.larceny, self.parent.stealth, self.parent.survival, self.parent.weaponry]
         outline[3][2] = outline[3][2] + [self.parent.widgetLib.makeBlankLabel(), self.parent.socialSubtitle, self.parent.socialPenalty, self.parent.animalken, self.parent.empathy, self.parent.expression, self.parent.intimidation, self.parent.persuasion, self.parent.socialize, self.parent.streetwise, self.parent.subterfuge]
         outline[4][0] = outline[4][0] + self.parent.healthBoxesArray
+        outline[4][1] = outline[4][1] + self.parent.willpowerBoxesArray
         return outline
 
     def pullSplatData(self, data):
@@ -23,6 +24,10 @@ class DefaultClass:
         for k in range(self.parent.settingsdict['healthboxescount']):
             array = array + [[self.parent.healthBoxesArray[k][0].isChecked(), self.parent.healthBoxesArray[k][1].getState()]]
         data = data | {'healthboxesArray': array}
+        array = []
+        for k in range(self.parent.settingsdict['willpowerboxescount']):
+            array = array + [[self.parent.willpowerBoxesArray[k][0].isChecked(), self.parent.willpowerBoxesArray[k][1].isChecked()]]
+        data = data | {'willpowerboxesArray': array}
         return data
 
     def pushSplatData(self, data):
@@ -103,6 +108,10 @@ class DefaultClass:
             self.parent.healthBoxesArray[k][0].setChecked(data.get('healthboxesArray')[k][0])
             self.parent.healthBoxesArray[k][1].setState(int(data.get('healthboxesArray')[k][1]))
 
+        for k in range(self.parent.settingsdict['willpowerboxescount']):
+            self.parent.willpowerBoxesArray[k][0].setChecked(data.get('willpowerboxesArray')[k][0])
+            self.parent.willpowerBoxesArray[k][1].setChecked(data.get('willpowerboxesArray')[k][1])
+
     def addSplat(self):
         self.parent.name = self.widgetLib.LabeledTextBox("Name")
         self.parent.player = self.widgetLib.LabeledTextBox("Player")
@@ -175,6 +184,9 @@ class DefaultClass:
 
         for k in range(self.parent.settingsdict['healthboxescount']):
             self.parent.healthBoxesArray = self.parent.healthBoxesArray + [self.widgetLib.makeCheckBoxQuadCheckBox()]
+
+        for k in range(self.parent.settingsdict['willpowerboxescount']):
+            self.parent.willpowerBoxesArray = self.parent.willpowerBoxesArray + [[self.widgetLib.makeCheckBox(self.parent.widgetLib.saveLoad.quickSave)[0], self.widgetLib.makeCheckBox(self.parent.widgetLib.saveLoad.quickSave)[0]]]
 
     def removeSplat(self):
         print("error code: RDS1")

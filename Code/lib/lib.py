@@ -156,6 +156,11 @@ class WidgetLibrary:
             box.textChanged.connect(self.parent.settingsClass.reloadSettings)
         return [label, box]
 
+    def makeCheckBox(self, checkdef):
+        checkbox = QtWidgets.QCheckBox()
+        checkbox.clicked.connect(checkdef)
+        return [checkbox]
+
     def LabeledCheckBox(self, labelName, checkdef):
         checkbox = QtWidgets.QCheckBox()
         checkbox.clicked.connect(checkdef)
