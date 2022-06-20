@@ -3,13 +3,14 @@ class DefaultClass:
         return checks
 
     def positionSplatElements(self, outline):
-        outline[0]['default'] = 'CofD.png'
+        outline[0]['default'] = 'resources/default/CofD.png'
         outline[1][0] = outline[1][0] + 4
         outline[1][1] = outline[1][1] + [[self.parent.name], [self.parent.player], [self.parent.concept], [self.parent.age]]
         outline[2] = outline[2] + [[[self.parent.powerSubtitle], self.parent.intelligence, self.parent.strength, self.parent.presence], [[self.parent.finesseSubtitle], self.parent.wits, self.parent.dexterity, self.parent.manipulation], [[self.parent.resistanceSubtitle], self.parent.resolve, self.parent.stamina, self.parent.composure]]
-        outline[3][0] = outline[3][0] + [[self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel()], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.mentalSubtitle], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.mentalPenalty], self.parent.academics, self.parent.computer, self.parent.crafts, self.parent.investigation, self.parent.medicine, self.parent.occult, self.parent.politics, self.parent.science]
-        outline[3][1] = outline[3][1] + [[self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel()], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.physicalSubtitle], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.physicalPenalty], self.parent.athletics, self.parent.brawl, self.parent.drive, self.parent.firearms, self.parent.larceny, self.parent.stealth, self.parent.survival, self.parent.weaponry]
-        outline[3][2] = outline[3][2] +[[self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel()], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.socialSubtitle], [self.parent.widgetLib.makeBlankLabel(), self.parent.widgetLib.makeBlankLabel(), self.parent.socialPenalty], self.parent.animalken, self.parent.empathy, self.parent.expression, self.parent.intimidation, self.parent.persuasion, self.parent.socialize, self.parent.streetwise, self.parent.subterfuge]
+        outline[3][0] = outline[3][0] + [self.parent.widgetLib.makeBlankLabel(), self.parent.mentalSubtitle, self.parent.mentalPenalty, self.parent.academics, self.parent.computer, self.parent.crafts, self.parent.investigation, self.parent.medicine, self.parent.occult, self.parent.politics, self.parent.science]
+        outline[3][1] = outline[3][1] + [self.parent.widgetLib.makeBlankLabel(), self.parent.physicalSubtitle, self.parent.physicalPenalty, self.parent.athletics, self.parent.brawl, self.parent.drive, self.parent.firearms, self.parent.larceny, self.parent.stealth, self.parent.survival, self.parent.weaponry]
+        outline[3][2] = outline[3][2] + [self.parent.widgetLib.makeBlankLabel(), self.parent.socialSubtitle, self.parent.socialPenalty, self.parent.animalken, self.parent.empathy, self.parent.expression, self.parent.intimidation, self.parent.persuasion, self.parent.socialize, self.parent.streetwise, self.parent.subterfuge]
+        outline[4][0] = outline[4][0] + self.parent.healthBoxesArray
         return outline
 
     def pullSplatData(self, data):
@@ -18,6 +19,10 @@ class DefaultClass:
         for k in range(self.parent.settingsdict['meritcount']):
             array = array + [[self.parent.meritsArray[k][0].text(), self.parent.meritsArray[k][1].text()]]
         data = data | {'meritsArray': array}
+        array = []
+        for k in range(self.parent.settingsdict['healthboxescount']):
+            array = array + [[self.parent.healthBoxesArray[k][0].isChecked(), self.parent.healthBoxesArray[k][1].getState()]]
+        data = data | {'healthboxesArray': array}
         return data
 
     def pushSplatData(self, data):
@@ -94,6 +99,10 @@ class DefaultClass:
             self.parent.meritsArray[k][0].setText(data.get('meritsArray')[k][0])
             self.parent.meritsArray[k][1].setText(data.get('meritsArray')[k][1])
 
+        for k in range(self.parent.settingsdict['healthboxescount']):
+            self.parent.healthBoxesArray[k][0].setChecked(data.get('healthboxesArray')[k][0])
+            self.parent.healthBoxesArray[k][1].setState(int(data.get('healthboxesArray')[k][1]))
+
     def addSplat(self):
         self.parent.name = self.widgetLib.LabeledTextBox("Name")
         self.parent.player = self.widgetLib.LabeledTextBox("Player")
@@ -163,6 +172,9 @@ class DefaultClass:
 
         for k in range(self.parent.settingsdict['meritcount']):
             self.parent.meritsArray = self.parent.meritsArray + [self.widgetLib.makeMerit()]
+
+        for k in range(self.parent.settingsdict['healthboxescount']):
+            self.parent.healthBoxesArray = self.parent.healthBoxesArray + [self.widgetLib.makeCheckBoxQuadCheckBox()]
 
     def removeSplat(self):
         print("error code: RDS1")

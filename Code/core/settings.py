@@ -56,15 +56,15 @@ class SettingsClass:
             # self.parent.saveLoad.quickSave()
 
     def positionElementsSettings(self):
-        self.widgetLib.addArraystoGridIndividual([self.widgetLib.makeBlankLabel(), self.settingsTitle, self.widgetLib.makeBlankLabel()], self.settingsTitleLayout)
-        self.widgetLib.addElementtoGridWithWidth(self.basicSettingsTitle, self.basicSettingsLayout, 6)
+        # self.widgetLib.addArraystoGridIndividual([self.settingsTitle)
+        # self.widgetLib.addElementtoGridWithWidth(self.basicSettingsTitle, self.basicSettingsLayout, 6)
         self.widgetLib.addArraystoGridGroup(self.meritCountSettings, self.basicSettingsLayout)
         # self.meritCountSettings[1].setText(self.parent.settingsdict['meritcount'])
-        self.widgetLib.addElementtoGridWithWidth(self.splatsSettingsTitle, self.splatsSettingsLayout, 6)
+        # self.widgetLib.addElementtoGridWithWidth(self.splatsSettingsTitle, self.splatsSettingsLayout, 6)
         self.parent.splatManager.positionSettingsChecks(self.checks)
 
     def basicSettings(self):
-        self.settingsTitleLayout = self.widgetLib.MakeGrid(3)
+        # self.settingsTitleLayout = self.widgetLib.MakeGrid(3)
         self.settingsTitle = self.widgetLib.makeTitle("Settings")
         self.settingsTitle.setFont(self.parent.titlefont)
         self.basicSettingsTitle = self.widgetLib.makeTitle("Basic Settings")
@@ -88,8 +88,11 @@ class SettingsClass:
 
         self.basicSettings()
 
-        self.widgetLib.addGridtoLayout(self.settingsTitleLayout[0], self.settingsLayout)
+        # self.widgetLib.addGridtoLayout(self.settingsTitleLayout[0], self.settingsLayout)
+        self.widgetLib.addElementtoGrid(self.settingsTitle, self.settingsLayout)
+        self.widgetLib.addElementtoGrid(self.basicSettingsTitle, self.settingsLayout)
         self.widgetLib.addGridtoLayout(self.basicSettingsLayout[0], self.settingsLayout)
+        self.widgetLib.addElementtoGrid(self.splatsSettingsTitle, self.settingsLayout)
         self.widgetLib.addGridtoLayout(self.splatsSettingsLayout[0], self.settingsLayout)
 
         self.positionElementsSettings()

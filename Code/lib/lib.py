@@ -13,6 +13,47 @@ from PySide6 import QtCore, QtWidgets, QtGui
 
 
 
+class QuadToggle:
+    def toggleQuadBox(self):
+        if self.counter == 0:
+            self.button.setIcon(QtGui.QIcon('resources/default/BashingBox.png'))
+            self.counter = 1
+        elif self.counter == 1:
+            self.button.setIcon(QtGui.QIcon('resources/default/LethalBox.png'))
+            self.counter = 2
+        elif self.counter == 2:
+            self.button.setIcon(QtGui.QIcon('resources/default/AggravatedBox.png'))
+            self.counter = 3
+        else:
+            self.button.setIcon(QtGui.QIcon('resources/default/BlankBox.png'))
+            self.counter = 0
+
+    def getState(self):
+        return self.counter
+
+    def getButton(self):
+        return self.button
+
+    def setState(self, counter):
+        self.counter = counter
+        if self.counter == 0:
+            self.button.setIcon(QtGui.QIcon('resources/default/BlankBox.png'))
+        elif self.counter == 1:
+            self.button.setIcon(QtGui.QIcon('resources/default/BashingBox.png'))
+        elif self.counter == 2:
+            self.button.setIcon(QtGui.QIcon('resources/default/LethalBox.png'))
+        else:
+            self.button.setIcon(QtGui.QIcon('resources/default/AggravatedBox.png'))
+
+
+    def __init__(self):
+        self.button = QtWidgets.QPushButton()
+        self.button.clicked.connect(self.toggleQuadBox)
+        self.button.setIcon(QtGui.QIcon('resources/default/BlankBox.png'))
+        self.counter = 0
+
+
+
 class SaveLoad:
     def quickSave(self):
         data = self.parent.splatManager.pullSplatData()
@@ -82,6 +123,13 @@ class WidgetLibrary:
         return [QtWidgets.QGridLayout(), columns, 0, 0]
         # return BundledGrid(columns)
 
+    def makeCheckBoxQuadCheckBox(self, window = "charsheet"):
+        checkbox = QtWidgets.QCheckBox()
+        quadcheckbox = QuadToggle()
+        if window == "charsheet":
+            checkbox.clicked.connect(self.saveLoad.quickSave)
+        return [checkbox, quadcheckbox]
+
     def makeMerit(self, window = "charsheet"):
         box1 = QtWidgets.QLineEdit()
         box2 = QtWidgets.QLineEdit()
@@ -124,11 +172,6 @@ class WidgetLibrary:
             grid[0].addWidget(element[k], grid[3], grid[2])
             grid[2] = grid[2] + 1
         return grid
-
-    def addElementtoGridWithWidth(self, element, grid, width):
-        grid[0].addWidget(element, grid[3], grid[2], grid[3], grid[2] + width - 1)
-        grid[2] = grid[2] + width
-        grid = self.areColumnsFull(grid)
 
     def addElementtoGrid(self, element, grid):
         grid[0].addWidget(element, grid[3], grid[2])
