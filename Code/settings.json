@@ -1,1 +1,1 @@
-{"settingsVersion": 0, "splats": [true, true], "meritcount": 10, "healthboxescount": 10, "willpowerboxescount": 10}
+{"settingsVersion": 0, "boxesordots": "dots", "boxesordotscount": 5, "dotsperrowcount": 10, "splats": [true, true], "meritcount": 10, "healthboxescount": 10, "willpowerboxescount": 10}

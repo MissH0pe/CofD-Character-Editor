@@ -13,6 +13,135 @@ from PySide6 import QtCore, QtWidgets, QtGui
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# pull each and everything out into a class for each widget so that it is universal between them
+# pull the methods of making data into categories for each thing and then  each specific one both sets of names are added to an array to populate settings menu so that you can toggle each on independently or groups which form each splat and each subthing like vampires vs ghouls vs revenants
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class LabeledBOD:
+    def deleteSelf(self):
+        if self.skill == True:
+            self.grid.removeWidget(self.checkbox)
+            self.checkbox.deleteLater()
+            self.checkbox = None
+        self.grid.removeWidget(self.label)
+        self.label.deleteLater()
+        self.label = None
+        if self.BOD == 'boxes':
+            self.dotGrid.removeWidget(self.box)
+            self.box.deleteLater()
+            self.box = None
+        elif self.BOD == 'dots':
+            for k in range(len(self.box)):
+                self.dotGrid.removeWidget(self.box[k])
+                self.box[k].deleteLater()
+                self.box[k] = None
+        else:
+            print("error code: BODS " + self.labelName)
+        return None
+
+    def pushData(self, val, bool=False):
+        if self.skill == True:
+            self.checkbox.setChecked(bool)
+        if self.BOD == 'boxes':
+            self.box.setText(str(val))
+        elif self.BOD == 'dots':
+            for k in range(val):
+                self.box[k].setChecked(True)
+        else:
+            print("error code: BODS " + self.labelName)
+
+    def pullData(self):
+        if self.BOD == 'boxes':
+            if self.box.text() == "":
+                return 0
+            else:
+                if self.skill == True:
+                    return [self.checkbox.isChecked(), int(self.box.text())]
+                return int(self.box.text())
+        elif self.BOD == 'dots':
+            counter = 0
+            for k in range(self.BODCount):
+                if self.box[k].isChecked():
+                    counter = counter + 1
+            if self.skill == True:
+                return [self.checkbox.isChecked(), counter]
+            return counter
+        else:
+            print("error code: BODL " + self.labelName)
+            return 0
+
+    def __init__(self, parent, labelName, window, saveload, skill = False):
+        self.parent = parent
+        self.label = QtWidgets.QLabel(labelName + ": ")
+        self.labelName = labelName
+        self.skill = skill
+        self.BOD = self.parent.settingsdict['boxesordots']
+        self.BODCount = 0
+        self.grid = QtWidgets.QGridLayout()
+        self.dotGrid = QtWidgets.QGridLayout()
+        if self.skill == True:
+            self.checkbox = QtWidgets.QCheckBox()
+            self.checkbox.clicked.connect(saveload.quickSave)
+            self.grid.addWidget(self.checkbox, 0, 0)
+            self.grid.addWidget(self.label, 0, 1)
+            self.grid.addLayout(self.dotGrid, 0, 2)
+        else:
+            self.grid.addWidget(self.label, 0, 0)
+            self.grid.addLayout(self.dotGrid, 0, 1)
+        self.dotsperrow = self.parent.settingsdict['dotsperrowcount']
+        if self.BOD == 'boxes':
+            self.box = QtWidgets.QLineEdit()
+            self.dotGrid.addWidget(self.box, 0, 0)
+            if window == "charsheet":
+                self.box.textChanged.connect(saveload.quickSave)
+        elif self.BOD == 'dots':
+            self.box = []
+            self.BODCount = self.parent.settingsdict['boxesordotscount']
+            counter = -1
+            for k in range(self.BODCount):
+                self.box = self.box + [QtWidgets.QCheckBox()]
+                if k % self.parent.settingsdict['dotsperrowcount'] == 0:
+                    counter = counter + 1
+                self.dotGrid.addWidget(self.box[k], counter, k % self.parent.settingsdict['dotsperrowcount'])
+                if window == "charsheet":
+                    self.box[k].clicked.connect(saveload.quickSave)
+        else:
+            print("error code: BODM " + self.labelName)
+
+
+
 class QuadToggle:
     def toggleQuadBox(self):
         if self.counter == 0:
@@ -139,17 +268,15 @@ class WidgetLibrary:
         return [box1, box2]
 
     def makeSkill(self, labelName, window = "charsheet"):
-        checkbox = QtWidgets.QCheckBox()
-        checkbox.clicked.connect(self.saveLoad.quickSave)
-        label = self.makeLabel(labelName)
-        box = QtWidgets.QLineEdit()
-        if window == "charsheet":
-            box.textChanged.connect(self.saveLoad.quickSave)
-        return [checkbox, label, box]
+        return LabeledBOD(self.parent, labelName, window, self.saveLoad, skill = True)
 
-    def LabeledTextBox(self, labelName, window = "charsheet"): #pass charsheet to window when using for charsheet or settings
+    def makeLabeledBOD(self, labelName, window = "charsheet"):
+        return LabeledBOD(self.parent, labelName, window, self.saveLoad)
+
+    def LabeledTextBox(self, labelName, window = "charsheet", text = ""): #pass charsheet to window when using for charsheet or settings
         label = self.makeLabel(labelName + ": ")
         box = QtWidgets.QLineEdit()
+        box.setText(text)
         if window == "charsheet":
             box.textChanged.connect(self.saveLoad.quickSave)
         elif window == "settings":

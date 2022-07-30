@@ -26,7 +26,24 @@ class ScrollableWindow(QtWidgets.QMainWindow):
 
 
 class SettingsClass:
-    def reloadSettings(self): # todo make sure to copy over data from existing merits and add back in if there is enough space
+    def reloadSettings(self):
+        if self.parent.settingsClass.dotsCountSettings[1].text() != "":
+            self.widgetLib.saveLoad.quickSave()
+
+            for k in range(len(self.parent.BODs)):
+                self.parent.BODs[k] = self.parent.BODs[k].deleteSelf()
+
+            self.parent.settingsdict['boxesordotscount'] = int(self.parent.settingsClass.dotsCountSettings[1].text())
+
+            with open('settings.json', 'w') as f:
+                json.dump(self.parent.settingsdict, f)
+
+            self.parent.BODs = []
+
+            self.parent.splatManager.splats[0].addBOD()
+
+            self.parent.splatManager.pushSplatData('quicksave.json')
+
         if self.parent.settingsClass.meritCountSettings[1].text() != "":
             array = []
             for k in range(len(self.parent.meritsArray)):
@@ -115,6 +132,8 @@ class SettingsClass:
     def positionElementsSettings(self):
         # self.widgetLib.addArraystoGridIndividual([self.settingsTitle)
         # self.widgetLib.addElementtoGridWithWidth(self.basicSettingsTitle, self.basicSettingsLayout, 6)
+        self.widgetLib.addArraystoGridGroup(self.dotsCountSettings, self.basicSettingsLayout)
+        self.widgetLib.addArraystoGridGroup(self.dotsPerRowSettings, self.basicSettingsLayout)
         self.widgetLib.addArraystoGridGroup(self.meritCountSettings, self.basicSettingsLayout)
         self.widgetLib.addArraystoGridGroup(self.healthBoxesCountSettings, self.basicSettingsLayout)
         self.widgetLib.addArraystoGridGroup(self.willpowerBoxesCountSettings, self.basicSettingsLayout)
@@ -129,9 +148,16 @@ class SettingsClass:
         self.basicSettingsTitle = self.widgetLib.makeTitle("Basic Settings")
         self.basicSettingsTitle.setFont(self.parent.subtitlefont)
         self.basicSettingsLayout = self.widgetLib.MakeGrid(6)
-        self.meritCountSettings = self.widgetLib.LabeledTextBox("Merit Boxes", window = "settings")
-        self.healthBoxesCountSettings = self.widgetLib.LabeledTextBox("Health Boxes", window = "settings")
-        self.willpowerBoxesCountSettings = self.widgetLib.LabeledTextBox("Willpower Boxes", window = "settings")
+        self.dotsCountSettings = self.widgetLib.LabeledTextBox("Number of Dots", window = "settings", text = str(self.parent.settingsdict['boxesordotscount']))
+        self.dotsPerRowSettings = self.widgetLib.LabeledTextBox("Dots per Row", window = "settings", text = str(self.parent.settingsdict['dotsperrowcount']))
+        self.meritCountSettings = self.widgetLib.LabeledTextBox("Merit Boxes", window = "settings", text = str(self.parent.settingsdict['meritcount']))
+        self.healthBoxesCountSettings = self.widgetLib.LabeledTextBox("Health Boxes", window = "settings", text = str(self.parent.settingsdict['healthboxescount']))
+        self.willpowerBoxesCountSettings = self.widgetLib.LabeledTextBox("Willpower Boxes", window = "settings", text = str(self.parent.settingsdict['willpowerboxescount']))
+        # self.dotsCountSettings[1].setText(str(self.parent.settingsdict['boxesordotscount']))
+        # self.dotsPerRowSettings[1].setText(str(self.parent.settingsdict['dotsperrowcount']))
+        # self.meritCountSettings[1].setText(str(self.parent.settingsdict['meritcount']))
+        # self.healthBoxesCountSettings[1].setText(str(self.parent.settingsdict['healthboxescount']))
+        # self.willpowerBoxesCountSettings[1].setText(str(self.parent.settingsdict['willpowerboxescount']))
         self.splatsSettingsTitle = self.widgetLib.makeTitle("Splat Settings")
         self.splatsSettingsTitle.setFont(self.parent.subtitlefont)
         self.splatsSettingsLayout = self.widgetLib.MakeGrid(6)
